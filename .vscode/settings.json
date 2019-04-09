@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true,
+  "fantomas.pageWidth": 60,
+  "fantomas.indent": 2,
+  "fantomas.preserveEOL": true,
+  "FSharp.linter": false,
+  "FSharp.fsacRuntime": "netcore",
+  "dotnet-test-explorer.autoWatch": true,
+  "dotnet-test-explorer.autoExpandTree": true,
+  "dotnet-test-explorer.codeLensFailed": "failed",
+  "dotnet-test-explorer.codeLensSkipped": "skipped",
+  "dotnet-test-explorer.codeLensPassed": "passed",
+  "dotnet-test-explorer.showCodeLens": true,
+}
