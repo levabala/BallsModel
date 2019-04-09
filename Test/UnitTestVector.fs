@@ -2,6 +2,8 @@ namespace Tests
 
 open BallsModel
 open NUnit.Framework
+open System
+open NUnit.Framework
 
 [<TestFixture>]
 type Vector() =
@@ -33,3 +35,42 @@ type Vector() =
     let passed = vectors |> List.map (fun v -> Vector.equal v v1)
 
     Assert.IsTrue(passed |> List.forall (fun p -> p))
+
+  [<Test>]
+  member this.RotateTest1() =
+    let v1 = BallsModel.Vector(1M<m>, 1M<m>, 2M<m>, 1M<m>)
+
+    let angle = Math.PI / 2.0 |> decimal |> LanguagePrimitives.DecimalWithMeasure
+    let v2 = v1.Rotate(angle)
+    let v2Exp =
+      BallsModel.Vector (
+        1M<m>,
+        1M<m>,
+        sqrt 5.0 |> decimal |> LanguagePrimitives.DecimalWithMeasure,
+        0.4636476M<rad> + angle,
+        obj,
+        obj
+      )
+
+    Assert.IsTrue(Vector.equal v2 v2Exp)
+
+
+  [<Test>]
+  member this.RotateTest2() =
+    let v1 = BallsModel.Vector(1M<m>, 1M<m>, 2M<m>, 1M<m>)
+
+    let angle = Math.PI |> decimal |> LanguagePrimitives.DecimalWithMeasure
+    let v2 = v1.Rotate(angle)
+    let v2Exp =
+      BallsModel.Vector (
+        1M<m>,
+        1M<m>,
+        -2M<m>,
+        -1M<m>,
+        -1M<m>,
+        0M<m>,
+        sqrt 5.0 |> decimal |> LanguagePrimitives.DecimalWithMeasure,
+        0.4636476M<rad> + angle
+      )
+
+    Assert.IsTrue(Vector.equal v2 v2Exp)
