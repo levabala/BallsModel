@@ -90,7 +90,7 @@ type Polygone =
 
 
             yield leftV
-            }
+        }
 
 
         {
