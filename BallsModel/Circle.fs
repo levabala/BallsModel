@@ -2,9 +2,9 @@
 
 type Circle = 
   struct
-    val x: decimal<m>;
-    val y: decimal<m>;
-    val radius: decimal<m>
+    val x: float<m>;
+    val y: float<m>;
+    val radius: float<m>
     new (x, y, radius) = {
       x = x; 
       y = y; 

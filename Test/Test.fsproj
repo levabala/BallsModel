@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="UnitTestLine.fs" />
     <Compile Include="UnitTestVector.fs" />
+    <Compile Include="UnitTestPhysicalBody.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

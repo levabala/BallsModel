@@ -3,6 +3,8 @@
   "fantomas.pageWidth": 60,
   "fantomas.indent": 2,
   "fantomas.preserveEOL": true,
+  "fantomas.reorderOpenDeclaration": true,
+  "fantomas.spaceAroundDelimiter": true,
   "FSharp.linter": false,
   "FSharp.fsacRuntime": "netcore",
   // "dotnet-test-explorer.autoWatch": true,
@@ -12,4 +14,5 @@
   "dotnet-test-explorer.codeLensPassed": "passed",
   "dotnet-test-explorer.showCodeLens": true,
   "dotnet-test-explorer.runInParallel": true,
+  "dotnet-test-explorer.testProjectPath": "./Test"
 }

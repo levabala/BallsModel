@@ -13,11 +13,11 @@ type Line() =
 
   [<Test>]
   member this.IntersectCheck1() =
-    let l1 = BallsModel.Line(0M<m>, 0M<m>, 6M<m>, 2M<m>)
-    let l2 = BallsModel.Line(4M<m>, 0M<m>, 2M<m>, 2M<m>)
+    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 6.0<m>, 2.0<m>)
+    let l2 = BallsModel.Line(4.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
 
     let interP = Line.intersect l1 l2
-    let interPExpected = Point(3M<m>, 1M<m>)
+    let interPExpected = Point(3.0<m>, 1.0<m>)
 
     match interP with
     | Some p -> Assert.IsTrue (p.x = interPExpected.x && p.y = interPExpected.y)
@@ -25,11 +25,11 @@ type Line() =
 
   [<Test>]
   member this.IntersectCheck2() =
-    let l1 = BallsModel.Line(0M<m>, 0M<m>, 6M<m>, 2M<m>)
-    let l2 = BallsModel.Line(4M<m>, 0M<m>, 2M<m>, 2M<m>)
+    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 6.0<m>, 2.0<m>)
+    let l2 = BallsModel.Line(4.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
 
     let interP = Line.intersect l1 l2
-    let interPExpected = Point(2M<m>, 0M<m>)
+    let interPExpected = Point(2.0<m>, 0.0<m>)
 
     match interP with
     | Some p -> Assert.IsTrue (p.x <> interPExpected.x && p.y <> interPExpected.y)
@@ -37,30 +37,30 @@ type Line() =
 
   [<Test>]
   member this.AngleCheck1() =
-    let l1 = BallsModel.Line(0M<m>, 0M<m>, 6M<m>, 0M<m>)
-    let l2 = BallsModel.Line(0M<m>, 0M<m>, 2M<m>, 2M<m>)
+    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 6.0<m>, 0.0<m>)
+    let l2 = BallsModel.Line(0.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
 
-    let angle = Line.angleBetween l1 l2 |> decimal |> float
+    let angle = Line.angleBetween l1 l2 |> float
     let angleExpected = Math.PI / 4.0
 
     Assert.AreEqual(angleExpected, angle, 10.0 ** (-5.0))
 
   [<Test>]
   member this.AngleCheck2() =
-    let l1 = BallsModel.Line(0M<m>, 0M<m>, 6M<m>, 0M<m>)
-    let l2 = BallsModel.Line(0M<m>, 0M<m>, -2M<m>, 2M<m>)
+    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 6.0<m>, 0.0<m>)
+    let l2 = BallsModel.Line(0.0<m>, 0.0<m>, -2.0<m>, 2.0<m>)
 
-    let angle = Line.angleBetween l1 l2 |> decimal |> float
+    let angle = Line.angleBetween l1 l2 |> float
     let angleExpected = Math.PI / 4.0 * 3.0
 
     Assert.AreEqual(angleExpected, angle, 10.0 ** (-5.0))
 
   [<Test>]
   member this.AngleCheck3() =
-    let l1 = BallsModel.Line(0M<m>, 0M<m>, 6M<m>, 0M<m>)
-    let l2 = BallsModel.Line(0M<m>, 0M<m>, 7M<m>, 0M<m>)
+    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 6.0<m>, 0.0<m>)
+    let l2 = BallsModel.Line(0.0<m>, 0.0<m>, 7.0<m>, 0.0<m>)
 
-    let angle = Line.angleBetween l1 l2 |> decimal |> float
+    let angle = Line.angleBetween l1 l2 |> float
     let angleExpected = 0.0
 
     Assert.AreEqual(angleExpected, angle, 10.0 ** (-5.0))

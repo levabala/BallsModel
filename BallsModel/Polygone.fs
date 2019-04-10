@@ -27,7 +27,7 @@ type Polygone =
       Array.fold
         (
           fun (acc : Line) (item : Line) ->
-            if abs (item.length) < abs (acc.length) && item.length <> 0M<m>
+            if abs (item.length) < abs (acc.length) && item.length <> 0.0<m>
             then item
             else acc
         )
@@ -43,22 +43,22 @@ type Polygone =
       }
     else
       let angle = (Vector(lines.[0]), Vector(lines.[1])) ||> Vector.angleBetween
-      let clockwise = angle >= 0M<rad>
+      let clockwise = angle >= 0.0<rad>
 
       if not clockwise
       then Polygone(Array.rev closed)
       else
         let normals : Vector array = Seq.toArray <| seq {
           for line in lines do
-            let center = Point (line.x1 + (line.x2 - line.x1) / 2M, line.y1 + (line.y2 - line.y1) / 2M)
+            let center = Point (line.x1 + (line.x2 - line.x1) / 2.0, line.y1 + (line.y2 - line.y1) / 2.0)
             let leftV =
               Vector(line)
                 .SetStart(center.x, center.y)
                 .SetLength(abs (smallestLine.length))
                 .Rotate(
                   Math.PI / -2.0
-                  |> decimal
-                  |> LanguagePrimitives.DecimalWithMeasure
+
+                  |> LanguagePrimitives.FloatWithMeasure
                 )
 
             let leftVEnd = leftV.EndPoint

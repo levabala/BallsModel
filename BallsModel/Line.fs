@@ -2,16 +2,16 @@
 
 [<Struct>]
 type Line =
-  val x1 : decimal<m>;
-  val y1 : decimal<m>;
-  val x2 : decimal<m>;
-  val y2 : decimal<m>;
-  val A : decimal<m>;
-  val B : decimal<m>;
-  val C : decimal<m^2>;
+  val x1 : float<m>;
+  val y1 : float<m>;
+  val x2 : float<m>;
+  val y2 : float<m>;
+  val A : float<m>;
+  val B : float<m>;
+  val C : float<m^2>;
   val startP : Point;
   val endP : Point;
-  val length : decimal<m>
+  val length : float<m>
 
   new(x1, y1, x2, y2) =
     let a = y2 - y1
@@ -36,23 +36,23 @@ type Line =
   new(p1 : Point, p2 : Point) =
     Line(p1.x, p1.y, p2.x, p2.y)
 
-  static member angleBetween (l1 : Line) (l2 : Line) : decimal<rad> =
-    let a1 = l1.A |> decimal |> float
-    let b1 = l1.B |> decimal |> float
-    let a2 = l2.A |> decimal |> float
-    let b2 = l2.B |> decimal |> float
+  static member angleBetween (l1 : Line) (l2 : Line) : float<rad> =
+    let a1 = l1.A |> float
+    let b1 = l1.B |> float
+    let a2 = l2.A |> float
+    let b2 = l2.B |> float
 
     let top = (a1 * a2 + b1 * b2)
     let bottom =
       ((a1 ** 2.0 + b1 ** 2.0) |> sqrt) *
       ((a2 ** 2.0 + b2 ** 2.0) |> sqrt)
 
-    top / bottom |> acos |> decimal |> LanguagePrimitives.DecimalWithMeasure
+    top / bottom |> acos  |> LanguagePrimitives.FloatWithMeasure
 
   static member intersect (l1 : Line) (l2 : Line) : Point option =
     let det = l1.A * l2.B - l1.B * l2.A
 
-    if det = 0M<m^2>
+    if det = 0.0<m^2>
     then None
     else
       let x = (l2.B * l1.C - l1.B * l2.C) / det
@@ -61,7 +61,7 @@ type Line =
       Point(x, y) |> Some
 
   static member pointIsOnLine (p : Point) (l : Line) : bool =
-    let eps : decimal<m^2> = 10.0 ** -6.0 |> decimal |> LanguagePrimitives.DecimalWithMeasure
+    let eps : float<m^2> = 10.0 ** -6.0  |> LanguagePrimitives.FloatWithMeasure
 
     abs (l.A * p.x + l.B * p.y - l.C) < eps
 
