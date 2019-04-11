@@ -14,6 +14,8 @@
     <Compile Include="Ball.fs" />
     <Compile Include="Polygone.fs" />
     <Compile Include="Wall.fs" />
+    <Compile Include="Intersect.fs" />
+    <Compile Include="State.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 

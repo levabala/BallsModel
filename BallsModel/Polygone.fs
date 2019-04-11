@@ -54,7 +54,7 @@ type Polygone =
             let leftV =
               Vector(line)
                 .SetStart(center.x, center.y)
-                .SetLength(abs (smallestLine.length))
+                .SetLength(line.length / 2.0)
                 .Rotate(
                   Math.PI / -2.0
 
@@ -68,25 +68,25 @@ type Polygone =
               (p.x - center.x) |> sign = leftXSign &&
               (p.y - center.y) |> sign = leftYSign
 
-            let (leftColls, rightColls) =
-              Array.fold
-                (fun (leftCollisions, rightCollisions) otherLine ->
-                  let interP = Line.intersect line otherLine
-                  match interP with
-                    | Some p ->
-                        let insideSegment = Line.pointIsOnLineSegment p otherLine
-                        match insideSegment with
-                          | false -> (leftCollisions, rightCollisions)
-                          | true ->
-                            let isLeft = pointIsLeft p
-                            let leftInc = if isLeft then 1 else 0
-                            let rightInc = abs (leftInc - 1)
+            // let (leftColls, rightColls) =
+            //   Array.fold
+            //     (fun (leftCollisions, rightCollisions) otherLine ->
+            //       let interP = Line.intersect line otherLine
+            //       match interP with
+            //         | Some p ->
+            //             let insideSegment = Line.pointIsOnLineSegment p otherLine
+            //             match insideSegment with
+            //               | false -> (leftCollisions, rightCollisions)
+            //               | true ->
+            //                 let isLeft = pointIsLeft p
+            //                 let leftInc = if isLeft then 1 else 0
+            //                 let rightInc = abs (leftInc - 1)
 
-                            (leftCollisions + leftInc, rightCollisions + rightInc)
-                    | None -> (leftCollisions, rightCollisions)
-                )
-                (0, 0)
-                lines
+            //                 (leftCollisions + leftInc, rightCollisions + rightInc)
+            //         | None -> (leftCollisions, rightCollisions)
+            //     )
+            //     (0, 0)
+            //     lines
 
 
             yield leftV

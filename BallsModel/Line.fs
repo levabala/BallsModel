@@ -49,17 +49,6 @@ type Line =
 
     top / bottom |> acos  |> LanguagePrimitives.FloatWithMeasure
 
-  static member intersect (l1 : Line) (l2 : Line) : Point option =
-    let det = l1.A * l2.B - l1.B * l2.A
-
-    if det = 0.0<m^2>
-    then None
-    else
-      let x = (l2.B * l1.C - l1.B * l2.C) / det
-      let y = (l1.A * l2.C - l2.A * l1.C) / det
-
-      Point(x, y) |> Some
-
   static member pointIsOnLine (p : Point) (l : Line) : bool =
     let eps : float<m^2> = 10.0 ** -6.0  |> LanguagePrimitives.FloatWithMeasure
 
@@ -73,10 +62,4 @@ type Line =
     else
       let distance = max (Point.dist p l.startP) (Point.dist p l.endP)
 
-      distance <= l.length
-
-  static member countCollisions (l : Line) (lines : Line array) =
-    Array.fold
-      (fun acc item -> if Line.intersect l item <> None then acc + 1 else acc)
-      0
-      lines
+      distance <= l.length  

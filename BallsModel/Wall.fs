@@ -10,3 +10,4 @@ type Wall =
       ph = PhysicalBody(moment, mass);
       frame = Polygone(points)
     }  
+    
