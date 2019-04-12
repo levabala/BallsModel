@@ -9,54 +9,7 @@ type Line() =
 
   [<SetUp>]
   member this.Setup() =
-    ()
-
-  [<Test>]
-  member this.IntersectCheck1() =
-    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 6.0<m>, 2.0<m>)
-    let l2 = BallsModel.Line(4.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
-
-    let interP = Intersect.intersect (l1, l2)
-    let interPExpected = Point(3.0<m>, 1.0<m>)
-
-    match interP with
-    | Some p -> Assert.IsTrue (p.x = interPExpected.x && p.y = interPExpected.y)
-    | None -> Assert.Fail()
-
-  [<Test>]
-  member this.IntersectCheck2() =
-    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 6.0<m>, 2.0<m>)
-    let l2 = BallsModel.Line(4.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
-
-    let interP = Intersect.intersect (l1, l2)
-    let interPExpected = Point(2.0<m>, 0.0<m>)
-
-    match interP with
-    | Some p -> Assert.IsTrue (p.x <> interPExpected.x && p.y <> interPExpected.y)
-    | None -> Assert.Fail()
-
-  [<Test>]
-  member this.IntersectSegmentCheck1() =
-    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 1.0<m>, 2.0<m>)
-    let l2 = BallsModel.Line(4.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
-
-    let interP = Intersect.intersect (l1, l2, true)
-
-    match interP with
-    | Some p -> Assert.Fail()
-    | None -> Assert.Pass()
-
-  [<Test>]
-  member this.IntersectSegmentCheck2() =
-    let l1 = BallsModel.Line(0.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
-    let l2 = BallsModel.Line(4.0<m>, 0.0<m>, 2.0<m>, 2.0<m>)
-
-    let interP = Intersect.intersect (l1, l2, true)
-    let interPExpected = Point(2.0<m>, 2.0<m>)
-
-    match interP with
-    | Some p -> Assert.IsTrue (p.x = interPExpected.x && p.y = interPExpected.y)
-    | None -> Assert.Fail()
+    ()  
 
   [<Test>]
   member this.AngleCheck1() =

@@ -10,6 +10,7 @@
     <Compile Include="UnitTestVector.fs" />
     <Compile Include="UnitTestPhysicalBody.fs" />
     <Compile Include="UnitTestPolygon.fs" />
+    <Compile Include="UnitTestIntersect.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
