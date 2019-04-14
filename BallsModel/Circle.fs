@@ -11,6 +11,6 @@ type Circle =
       radius = radius;
     }
     
-    member this.Point = 
+    member this.asPoint = 
       Point(this.x, this.y)
   end

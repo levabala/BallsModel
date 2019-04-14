@@ -48,7 +48,7 @@ type Polygon() =
 
     let normalsAnglesExpected =
       linesExpected |>
-      Array.map (fun l -> float (BallsModel.Vector(l).angle) - Math.PI / 2.0 |> LanguagePrimitives.FloatWithMeasure)
+      Array.map (fun l -> float (BallsModel.Vector<_>.FromLine(l).angle) - Math.PI / 2.0 |> LanguagePrimitives.FloatWithMeasure)
 
     polygon.normals |> Seq.indexed |> Seq.forall (fun (i, n) ->
         abs (n.angle - normalsAnglesExpected.[i]) |> float < 10.0 ** (-5.0)

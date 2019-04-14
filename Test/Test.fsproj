@@ -11,6 +11,7 @@
     <Compile Include="UnitTestPhysicalBody.fs" />
     <Compile Include="UnitTestPolygon.fs" />
     <Compile Include="UnitTestIntersect.fs" />
+    <Compile Include="UnitTestState.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@ open BallsModel
 open NUnit.Framework
 open System
 
+
 [<TestFixture>]
 type Intersect() =
 
@@ -110,3 +111,34 @@ type Intersect() =
     let interPoints = Intersect.intersect (line, polygon)
 
     Assert.AreEqual(interPoints.Length, 0)
+
+  [<Test>]
+  member this.Line2CircleTest1() =
+    let line = BallsModel.Line(1.0<m>, 2.0<m>, 8.0<m>, 2.0<m>)
+    let circle = BallsModel.Circle(5.0<m>, 2.0<m>, 1.0<m>)
+
+    let interPoints = Intersect.intersect (line, circle)
+    let interPointsExp = [|
+      Point(6.0<m>, 2.0<m>);
+      Point(4.0<m>, 2.0<m>);
+    |]
+
+    Assert.IsTrue (
+      Point.equal interPoints.[0] interPointsExp.[0] &&
+      Point.equal interPoints.[1] interPointsExp.[1]
+    )
+
+  [<Test>]
+  member this.Line2CircleTest2() =
+    let line = BallsModel.Line(1.0<m>, 1.0<m>, 8.0<m>, 1.0<m>)
+    let circle = BallsModel.Circle(5.0<m>, 2.0<m>, 1.0<m>)
+
+    let interPoints = Intersect.intersect (line, circle)
+    let interPointsExp = [|
+      Point(5.0<m>, 1.0<m>);
+    |]
+
+    Assert.IsTrue (
+      Point.equal interPoints.[0] interPointsExp.[0]
+    )
+
