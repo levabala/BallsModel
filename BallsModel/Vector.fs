@@ -104,6 +104,9 @@ type Vector =
       angle = angle;
     }
 
+  member this.AsLine = 
+    BallsModel.Line(this.x, this.y, this.ex, this.ey)
+
   member this.CalcEnd(length : float<m>) : Point =
     Point (this.x + this.dx / this.length * length, this.y + this.dy / this.length * length)
 

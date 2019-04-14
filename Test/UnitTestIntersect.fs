@@ -59,7 +59,7 @@ type Intersect() =
     | None -> Assert.Fail()
 
   [<Test>]
-  member this.Line2Polygon() =
+  member this.Line2PolygonTest1() =
     let points = [|
       Point(3.0<m>, 1.0<m>);
       Point(6.0<m>, 2.0<m>);
@@ -89,7 +89,24 @@ type Intersect() =
       )).Value;
     |]
 
-    interPoints 
-    |> Seq.indexed 
+    interPoints
+    |> Seq.indexed
     |> Seq.forall (fun (i, p) -> Point.equal p interPointsExp.[i])
     |> Assert.IsTrue
+
+  [<Test>]
+  member this.Line2PolygonTest2() =
+    let points = [|
+      Point(3.0<m>, 1.0<m>);
+      Point(6.0<m>, 2.0<m>);
+      Point(5.0<m>, 6.0<m>);
+      Point(2.0<m>, 5.0<m>);
+      Point(1.0<m>, 3.0<m>);
+    |]
+
+    let polygon = Polygone(points)
+    let line = Line(0.0<m>, 0.0<m>, 7.0<m>, 0.0<m>)
+
+    let interPoints = Intersect.intersect (line, polygon)
+
+    Assert.AreEqual(interPoints.Length, 0)

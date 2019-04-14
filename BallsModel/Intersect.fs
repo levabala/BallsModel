@@ -43,3 +43,21 @@ type Intersect() =
 
   static member intersect (l1 : Line, wall : Wall) : Point array =
     Intersect.intersect (l1, wall.frame)
+
+  static member intersect (v1 : Vector, polygone : Polygone) : Point array =
+    Intersect.intersect (v1.AsLine, polygone.lines, true)
+
+  static member intersect (v1 : Vector, wall : Wall) : Point array =
+    Intersect.intersect (v1.AsLine, wall.frame)
+
+  static member intersect (l1: Line, c: Circle) : Point array = 
+    [||]  
+
+  static member intersect (l1: Line, b: Ball) : Point array = 
+    Intersect.intersect (l1, b.frame)
+
+  static member intersect (v1: Vector, c: Circle) : Point array = 
+    Intersect.intersect (v1.AsLine, c)
+
+  static member intersect (v1: Vector, b: Ball) : Point array = 
+    Intersect.intersect (v1.AsLine, b)
