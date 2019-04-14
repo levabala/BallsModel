@@ -48,7 +48,7 @@ type Intersect() =
     |> Seq.toArray
 
   static member intersect (l1 : Line, polygone : Polygone) : Point array =
-    Intersect.intersect (l1, polygone.lines, true)
+    Intersect.intersect (l1, polygone.lines, true, true)
 
   static member intersect (l1 : Line, wall : Wall) : Point array =
     Intersect.intersect (l1, wall.frame)

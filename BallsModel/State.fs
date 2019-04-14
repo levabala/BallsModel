@@ -66,31 +66,36 @@ type State =
             |> Array.where
               (fun (wall, points) -> points.Length > 0)
 
-          let closestIntersection =
-            intersections
-            |> Array.minBy
-              (fun (wall, points) ->
-                (
-                  ball.frame.asPoint,
+          if intersections.Length = 0
+          then None
+          else
+            let closestIntersection =
+              intersections
+              |> Array.minBy
+                (fun (wall, points) ->
                   (
-                    points
-                    |> Array.minBy (fun p -> Point.dist ball.frame.asPoint p)
+                    ball.frame.asPoint,
+                    (
+                      points
+                      |> Array.minBy (fun p -> Point.dist ball.frame.asPoint p)
+                    )
                   )
+                  ||> Point.dist
                 )
-                ||> Point.dist
-              )
 
-          let (interWall, interPoints) = closestIntersection
-          let closestPoint = interPoints |> Array.minBy (fun p -> Point.dist ball.frame.asPoint p)
+            let (interWall, interPoints) = closestIntersection
+            let closestPoint = interPoints |> Array.minBy (fun p -> Point.dist ball.frame.asPoint p)
 
-          let distToIntersect = Point.dist ball.frame.asPoint closestPoint
-          let timeToIntersect = distToIntersect / ball.ph.speed.length
+            let distToIntersect = Point.dist ball.frame.asPoint closestPoint
+            let timeToIntersect = distToIntersect / ball.ph.speed.length
 
-          (ball, interWall, distToIntersect, timeToIntersect)
+            Some (ball, interWall, distToIntersect, timeToIntersect)
       )
 
     let closestIntersection =
       intersections
+      |> Array.where (fun t -> t.IsSome)
+      |> Array.map (fun t -> t.Value)
       |> Array.minBy (fun (_, _, _, timeToIntersect) -> timeToIntersect)
 
     let (ball, interWall, distToIntersect, timeToIntersect) = closestIntersection

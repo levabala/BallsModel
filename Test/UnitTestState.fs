@@ -33,5 +33,6 @@ type StateTests() =
     |]
 
     let s1 = State(balls, walls, 1.0<s>)
+    let s2 = s1.nextState
 
     Assert.Pass()
