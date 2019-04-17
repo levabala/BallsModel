@@ -16,7 +16,7 @@ type StateTests() =
       Ball (
         BallsModel.Vector(1.0<m/s>, 0.0<m/s>),
         1.0<kg>,
-        BallsModel.Circle(1.0<m>, 1.0<m>, 1.0<m>)
+        BallsModel.Circle(1.0<m>, 2.0<m>, 1.0<m>)
       )
     |]
 
@@ -35,4 +35,12 @@ type StateTests() =
     let s1 = State(balls, walls, 1.0<s>)
     let s2 = s1.nextState
 
-    Assert.Pass()
+    match s2 with
+    | Some s ->
+      let dx' = s.balls.[0].ph.speed.dx |> float
+      let dx'Exp = -0.98019801980198
+      Assert.AreEqual(dx', dx'Exp, 10.0 ** (-5.0))
+
+    | None -> Assert.Fail()
+
+

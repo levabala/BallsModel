@@ -3,8 +3,8 @@ open System
 
 [<Struct>]
 type PhysicalBody =
-  val pos: Point
-  val speed : Vector<m/s>;
+  val pos : Point
+  val speed : Vector<m / s>;
   val mass : float<kg>;
 
   new(pos, speed, mass) =
@@ -14,14 +14,17 @@ type PhysicalBody =
       mass = mass;
     }
 
-  member this.move (time: float<s>) = 
-    PhysicalBody(
-      Point(this.pos.x + this.speed.dx * time, this.pos.y + this.speed.dy * time),
+  member this.move (time : float<s>) =
+    PhysicalBody (
+      Point (this.pos.x + this.speed.dx * time, this.pos.y + this.speed.dy * time),
       this.speed,
       this.mass
     )
 
-  member this.withSpeed(speed : Vector<m/s>) =
+  member this.withPos (pos : Point) =
+    PhysicalBody(pos, this.speed, this.mass)
+
+  member this.withSpeed (speed : Vector<m / s>) =
     PhysicalBody(this.pos, speed, this.mass)
 
   static member Bounce (ph1 : PhysicalBody) (ph2 : PhysicalBody) : PhysicalBody * PhysicalBody =
@@ -40,10 +43,10 @@ type PhysicalBody =
     let v1' = Vector(dx1, v1.dy)
     let v2' = Vector(dx2, v2.dy)
 
-    let v1'' = v1'.rotate(alpha)
-    let v2'' = v2'.rotate(alpha)
+    let v1'' = v1'.rotate (alpha)
+    let v2'' = v2'.rotate (alpha)
 
-    ph1.withSpeed(v1''), ph2.withSpeed(v2'')
+    ph1.withSpeed (v1''), ph2.withSpeed (v2'')
 
   static member equal (ph1 : PhysicalBody) (ph2 : PhysicalBody) : bool =
     let eps = 10.0 ** (-5.0)
@@ -54,6 +57,6 @@ type PhysicalBody =
 
     deltas |> List.map abs |> List.forall (fun d -> d < eps) && Vector.equal ph1.speed ph2.speed
 
-type Physical = 
-  abstract member id : Guid
-  abstract member ph : PhysicalBody
+type Physical =
+  abstract id : Guid
+  abstract ph : PhysicalBody

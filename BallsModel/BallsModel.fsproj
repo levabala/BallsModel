@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="StateTest.fsx" />
     <Compile Include="Measures.fs" />
     <Compile Include="Point.fs" />
     <Compile Include="Line.fs" />
@@ -18,6 +19,8 @@
     <Compile Include="State.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
+
+  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.1.2" />

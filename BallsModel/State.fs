@@ -14,9 +14,11 @@ type State =
       timeStamp = timeStamp;
     }
 
-  member this.nextState : State =
+  member this.nextState : State option =
     let balls = this.balls
     let walls = this.walls
+
+    let PI = System.Math.PI
 
     let intersections =
       balls
@@ -24,44 +26,67 @@ type State =
         (fun ball ->
           let rightV =
             ball.ph.speed.rotate(
-              Math.PI / 2.0 |> LanguagePrimitives.FloatWithMeasure
+              PI / 2.0 |> LanguagePrimitives.FloatWithMeasure
             ) .withLength(ball.frame.radius / 1.0<s>)
 
           let leftV =
             ball.ph.speed.rotate(
-              -Math.PI / 2.0 |> LanguagePrimitives.FloatWithMeasure
+              -PI / 2.0 |> LanguagePrimitives.FloatWithMeasure
             ) .withLength(ball.frame.radius / 1.0<s>)
 
+          let mainLine = ball.ph.speed.asLine (ball.frame.asPoint)
           let interLines = [|
-            ball.ph.speed.asLine();
+            mainLine;
             ball.ph.speed.asLine (ball.frame.asPoint + rightV);
             ball.ph.speed.asLine (ball.frame.asPoint + leftV);
           |]
 
-          let intersections : (Wall * Point array) array =
+          let intersections : (Wall * ((Point * Line) array)) array =
             walls
             |> Array.map
               (fun wall ->
-                  let interPoints =
+                  let abstractInterPoints : (Point * Vector<m> * Line) array =
                     wall.frame.lines
+                    |> Array.indexed
                     |> Array.map
-                      (fun wallLine ->
-                        interLines
-                        |> Array.map
-                          (fun ballLine ->
-                              Intersect.intersect (ballLine, wallLine, false, true)
-                          )
-                      )
-                    |> Array.concat
-                    |> Array.where
-                      (fun interP ->
-                        match interP with
-                        | Some p -> true
-                        | None -> false
-                      )
-                    |> Array.map (fun interP -> interP.Value)
+                      (fun (i, wallLine) ->
+                        let normal = wall.frame.normals.[i]
 
-                  (wall, interPoints)
+                        let point =
+                          interLines
+                          |> Array.map
+                            (fun ballLine ->
+                                Intersect.intersect (ballLine, wallLine, false, true)
+                            )
+                          |> Array.where
+                            (fun interP ->
+                              match interP with
+                              | Some p -> true
+                              | None -> false
+                            )
+                          |> Array.map (fun interP -> interP.Value)
+                          |> Array.tryLast
+
+                        (point, normal, wallLine)
+                      )
+                    |> Array.where
+                      (fun (p, n, l) -> p.IsSome)
+                    |> Array.map
+                      (fun (p, n, l) -> (p.Value, n, l))
+
+                  let realInterPoints =
+                    abstractInterPoints
+                    |> Array.map
+                      (fun (abstractPoint, normal, wallLine) ->
+                        let pointTop = (normal.withLength ball.frame.radius) + abstractPoint
+                        let verticalLine = (Vector<_>.FromLine wallLine) .asLine pointTop
+                        let ballCenter = Intersect.intersect (mainLine, verticalLine)
+                        match ballCenter with
+                        | Some p -> (p, wallLine)
+                        | None -> failwith "cannot build ball center after bouncing"
+                      )
+
+                  (wall, realInterPoints)
               )
             |> Array.where
               (fun (wall, points) -> points.Length > 0)
@@ -77,45 +102,57 @@ type State =
                     ball.frame.asPoint,
                     (
                       points
-                      |> Array.minBy (fun p -> Point.dist ball.frame.asPoint p)
+                      |> Array.map (fun (p, l) -> p)
+                      |> Array.minBy (fun p -> Point.dist ball.frame.asPoint p)                      
                     )
                   )
                   ||> Point.dist
                 )
 
             let (interWall, interPoints) = closestIntersection
-            let closestPoint = interPoints |> Array.minBy (fun p -> Point.dist ball.frame.asPoint p)
+            let (closestPoint, closestWallLine) = 
+              interPoints 
+              |> Array.minBy (fun (p, l) -> Point.dist ball.frame.asPoint p)
 
             let distToIntersect = Point.dist ball.frame.asPoint closestPoint
             let timeToIntersect = distToIntersect / ball.ph.speed.length
 
-            Some (ball, interWall, distToIntersect, timeToIntersect)
+            Some (ball, interWall, closestPoint, closestWallLine, distToIntersect, timeToIntersect)
       )
-
-    let closestIntersection =
-      intersections
       |> Array.where (fun t -> t.IsSome)
       |> Array.map (fun t -> t.Value)
-      |> Array.minBy (fun (_, _, _, timeToIntersect) -> timeToIntersect)
 
-    let (ball, interWall, distToIntersect, timeToIntersect) = closestIntersection
+    if intersections.Length = 0
+    then None
+    else
+      let closestIntersection =
+        intersections
+        |> Array.minBy (fun (_, _, _, _, _, timeToIntersect) -> timeToIntersect)
 
-    let newBalls =
-      this.balls
-      |> Array.map
-        (fun b ->
-          let newBall =
-            if b.id = ball.id
+      let (ball, interWall, interPoint, closestWallLine, distToIntersect, timeToIntersect) = closestIntersection
+
+      let interLine = closestWallLine
+      let perpVector =
+        (Vector<_>.FromLine interLine) .rotate(Math.PI / 2.0 |> LanguagePrimitives.FloatWithMeasure)
+      let perpLine = perpVector.asLine interPoint
+      let perpInterPoint = (Intersect.intersect (perpLine, interLine)).Value
+
+      let relativeWallPh = interWall.phRelativeTo perpInterPoint
+
+      let newBalls =
+        this.balls
+        |> Array.map
+          (fun b ->
+            let movedBall = timeToIntersect |> b.move
+            if movedBall.id = ball.id
             then
-              let (newPh, _) = PhysicalBody.Bounce b.ph interWall.ph
+              let (newPh, newWallPh) = PhysicalBody.Bounce movedBall.ph relativeWallPh
 
-              Ball(b.id, newPh, b.frame)
-            else b
+              Ball(movedBall.id, newPh, movedBall.frame)
+            else movedBall
+          )
 
-          timeToIntersect |> newBall.move
-        )
+      let newWalls = this.walls
+      let newTimeStamp = this.timeStamp + timeToIntersect
 
-    let newWalls = this.walls
-    let newTimeStamp = this.timeStamp + timeToIntersect
-
-    State(newBalls, newWalls, newTimeStamp)
+      Some(State(newBalls, newWalls, newTimeStamp))

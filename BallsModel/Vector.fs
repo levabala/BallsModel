@@ -44,9 +44,11 @@ type Vector< [<Measure>] 'T> =
     Vector<m>(dx, dy)
 
   static member FromAngle (length : float<'T>) (angle : float<rad>) =
+    let dx = (angle |> float |> cos) * length
+    let dy = (angle |> float |> sin) * length
     Vector<'T>(
-      (angle |> float |> cos) * length,
-      (angle |> float |> sin) * length,
+      dx,
+      dy,
       length,
       angle
     )
@@ -56,12 +58,14 @@ type Vector< [<Measure>] 'T> =
 
   member this.asLine (?origin0 : Point) =
     let origin = defaultArg origin0 (Point(0.0<m>, 0.0<m>))
+    let ex = (origin.x |> float) + (this.dx |> float) |> LanguagePrimitives.FloatWithMeasure
+    let ey = (origin.y |> float) + (this.dy |> float) |> LanguagePrimitives.FloatWithMeasure
 
     Line(
       origin.x,
       origin.y,
-      this.dx |> float |> LanguagePrimitives.FloatWithMeasure,
-      this.dy |> float |> LanguagePrimitives.FloatWithMeasure
+      ex,
+      ey
     )
 
   member this.rotate (angle : float<rad>) : Vector<'T> =
@@ -101,8 +105,8 @@ type Vector< [<Measure>] 'T> =
     deltas |> List.map abs |> List.forall (fun d -> d < eps)
 
   static member (+) (v : Vector<'u>, p : Point) : Point =
-    Point(
-      (p.x |> float) + (v.dx |> float) |> LanguagePrimitives.FloatWithMeasure, 
+    Point (
+      (p.x |> float) + (v.dx |> float) |> LanguagePrimitives.FloatWithMeasure,
       (p.y |> float) + (v.dy |> float) |> LanguagePrimitives.FloatWithMeasure
     )
 

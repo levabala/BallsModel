@@ -18,12 +18,12 @@ type Intersect() =
         let p = Point(x, y)
         let insideSegments =
           (
-            not likeSegment1 || 
+            not likeSegment1 ||
             Point.dist p l1.startP <= l1.length &&
             Point.dist p l1.endP <= l1.length
           ) &&
           (
-            not likeSegment2 || 
+            not likeSegment2 ||
             Point.dist p l2.startP <= l2.length &&
             Point.dist p l2.endP <= l2.length
           )
