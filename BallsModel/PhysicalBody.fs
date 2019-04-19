@@ -6,12 +6,14 @@ type PhysicalBody =
   val pos : Point
   val speed : Vector<m / s>;
   val mass : float<kg>;
+  val timeToIntersect : float option;
 
-  new(pos, speed, mass) =
+  new(pos, speed, mass, ?timeToIntersect) =
     {
       pos = pos;
       speed = speed;
       mass = mass;
+      timeToIntersect = timeToIntersect;
     }
 
   member this.move (time : float<s>) =

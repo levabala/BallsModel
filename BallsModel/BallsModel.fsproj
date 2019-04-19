@@ -9,6 +9,7 @@
     <Compile Include="Measures.fs" />
     <Compile Include="Point.fs" />
     <Compile Include="Line.fs" />
+    <Compile Include="Square.fs" />
     <Compile Include="Vector.fs" />
     <Compile Include="PhysicalBody.fs" />
     <Compile Include="Circle.fs" />
@@ -16,6 +17,7 @@
     <Compile Include="Polygone.fs" />
     <Compile Include="Wall.fs" />
     <Compile Include="Intersect.fs" />
+    <Compile Include="Collision.fs" />
     <Compile Include="State.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
