@@ -2,7 +2,6 @@
 
 open System
 
-
 [<Struct>]
 type Vector< [<Measure>] 'T> =
   val dx : float<'T>;
@@ -104,6 +103,12 @@ type Vector< [<Measure>] 'T> =
 
     deltas |> List.map abs |> List.forall (fun d -> d < eps)
 
+  static member (*) (v : Vector<'u>, m : float<'g>) = 
+    Vector.FromAngle (v.length * m) v.angle
+
+  static member (+) (v1 : Vector<'u>, v2 : Vector<'u>) = 
+    Vector(v1.dx + v2.dx, v1.dy + v2.dy)
+
   static member (+) (v : Vector<'u>, p : Point) : Point =
     Point (
       (p.x |> float) + (v.dx |> float) |> LanguagePrimitives.FloatWithMeasure,
@@ -112,3 +117,5 @@ type Vector< [<Measure>] 'T> =
 
   static member (+) (p : Point, v : Vector<'u>) : Point =
     v + p
+
+  

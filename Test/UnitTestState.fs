@@ -33,7 +33,7 @@ type StateTests() =
     |]
 
     let s1 = State(balls, walls, 1.0<s>)
-    let s2 = s1.nextState
+    let s2 = s1.nextState (0.1<s> |> Some)
 
     match s2 with
     | Some s ->
@@ -66,7 +66,7 @@ type StateTests() =
     |]
 
     let s1 = State(balls, walls, 1.0<s>)
-    let s2 = s1.nextState
+    let s2 = s1.nextState (0.1<s> |> Some)
 
     match s2 with
     | Some s ->

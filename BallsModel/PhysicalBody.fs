@@ -5,22 +5,26 @@ open System
 type PhysicalBody =
   val pos : Point
   val speed : Vector<m / s>;
+  val acc : Vector<m / s^2>
   val mass : float<kg>;
   val timeToIntersect : float option;
 
-  new(pos, speed, mass, ?timeToIntersect) =
+  new(pos, speed, mass, ?acc0 : Vector<m / s^2>, ?timeToIntersect) =
+    let acc = defaultArg acc0 (Vector<m / s^2>(0.0<m / s^2>, 0.0<m / s^2>))
     {
       pos = pos;
       speed = speed;
       mass = mass;
+      acc = acc;
       timeToIntersect = timeToIntersect;
     }
 
   member this.move (time : float<s>) =
     PhysicalBody (
       Point (this.pos.x + this.speed.dx * time, this.pos.y + this.speed.dy * time),
-      this.speed,
-      this.mass
+      this.speed + this.acc * time,
+      this.mass,
+      this.acc
     )
 
   member this.withPos (pos : Point) =

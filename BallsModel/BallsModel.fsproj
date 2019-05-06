@@ -7,7 +7,7 @@
   <ItemGroup>
     <None Include="StateTest.fsx" />
     <Compile Include="Measures.fs" />
-    <Compile Include="Point.fs" />
+    <Compile Include="Point.fs" />    
     <Compile Include="Line.fs" />
     <Compile Include="Square.fs" />
     <Compile Include="Vector.fs" />
@@ -16,6 +16,7 @@
     <Compile Include="Ball.fs" />
     <Compile Include="Polygone.fs" />
     <Compile Include="Wall.fs" />
+    <Compile Include="ICollisable.fs" />
     <Compile Include="Intersect.fs" />
     <Compile Include="Collision.fs" />
     <Compile Include="State.fs" />

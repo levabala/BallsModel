@@ -1,14 +1,44 @@
 namespace BallsModel
 
 type Intersect() =
-  static member intersect (l1 : Line, l2 : Line, ?likeSegments0 : bool, ?likeSegments1 : bool) : Point option =
+  static member intersect (c1 : ICollisable<_>, c2 : ICollisable<_>) : Point array =    
+    match c1 with
+      | Circle obj1 -> 
+          match c2 with 
+            | Circle obj2 -> failwith "This collision is not handled"
+            | Polygone obj2 -> failwith "This collision is not handled"
+            | Vector obj2 -> Intersect.intersect (obj2, obj1)
+            | Line obj2 -> Intersect.intersect (obj2, obj1) 
+      
+      | Polygone obj1 -> 
+          match c2 with 
+            | Circle obj2 -> failwith "This collision is not handled"
+            | Polygone obj2 -> failwith "This collision is not handled"
+            | Vector obj2 -> Intersect.intersect (obj2, obj1) 
+            | Line obj2 -> Intersect.intersect (obj2, obj1) 
+
+      | Line obj1 -> 
+          match c2 with 
+            | Vector obj2 -> failwith "This collision is not handled"
+            | Circle obj2 -> Intersect.intersect (obj1, obj2)           
+            | Polygone obj2 -> Intersect.intersect (obj1, obj2)           
+            | Line obj2 -> Intersect.intersect (obj1, obj2)           
+
+      | Vector obj1 -> 
+          match c2 with 
+            | Circle obj2 -> Intersect.intersect (obj1, obj2)                     
+            | Polygone obj2 -> Intersect.intersect (obj1, obj2)                     
+            | Vector obj2 -> failwith "This collision is not handled"
+            | Line obj2 -> failwith "This collision is not handled"
+
+  static member intersect (l1 : Line, l2 : Line, ?likeSegments0 : bool, ?likeSegments1 : bool) : Point array =
     let likeSegment1 = defaultArg likeSegments0 false
     let likeSegment2 = defaultArg likeSegments1 false
 
     let det = l1.A * l2.B - l1.B * l2.A
 
     if det = 0.0<m^2>
-    then None
+    then [||]
     else
       let x = (l2.B * l1.C - l1.B * l2.C) / det
       let y = (l1.A * l2.C - l2.A * l1.C) / det
@@ -29,11 +59,11 @@ type Intersect() =
           )
 
         if insideSegments
-        then p |> Some
-        else None
+        then [|p|]
+        else [||]
 
       else
-        Point(x, y) |> Some
+        [|Point(x, y)|]
 
   static member intersect (l1 : Line, lines : Line array, ?likeSegments0 : bool, ?likeSegments1 : bool) : Point array =
     let likeSegment1 = defaultArg likeSegments0 false
@@ -43,8 +73,8 @@ type Intersect() =
       for line in lines do
         yield Intersect.intersect (l1, line, likeSegment1, likeSegment2)
     }
-    |> Seq.where (fun p -> p <> None)
-    |> Seq.map (fun p -> p.Value)
+    |> Seq.where (fun p -> p.Length <> 0)
+    |> Seq.map (fun p -> p.[0])
     |> Seq.toArray
 
   static member intersect (l1 : Line, polygone : Polygone) : Point array =

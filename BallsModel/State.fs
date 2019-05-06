@@ -68,11 +68,9 @@ type State =
                       )
                     |> Array.where
                       (fun interP ->
-                        match interP with
-                        | Some p -> true
-                        | None -> false
+                        interP.Length <> 0
                       )
-                    |> Array.map (fun interP -> interP.Value)
+                    |> Array.map (fun interP -> interP.[0])
 
                   let point =
                     points
@@ -93,7 +91,9 @@ type State =
               |> Array.map
                 (fun (abstractPoint, normal, wallLine) ->
                   let pointTop = (normal.withLength ball.frame.radius) + abstractPoint
-                  let verticalLine = (Vector<_>.FromLine wallLine) .asLine pointTop
+                  let vv = Vector<_>.FromLine
+                  let wallV = vv wallLine
+                  let verticalLine = () .asLine pointTop
                   let ballCenter = Intersect.intersect (mainLine, verticalLine)
                   match ballCenter with
                   | Some p -> (p, wallLine)
